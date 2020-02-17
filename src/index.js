@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Background from './assets/background';
+import { renderToStaticMarkup } from 'react-dom/server';
+
+// const App = () => {
+//     const svgString = encodeURIComponent(renderToStaticMarkup(<Background />));
+//     const dataUri = `url("data:image/svg+xml,${svgString}") no-repeat center center`;
+//     return <Game background={dataUri}></Game>
+// }
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
