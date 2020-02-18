@@ -23,7 +23,6 @@ const Game = () => {
             pipeContainer.addNewPipe();
         }
         bird.updateBirdSpeed()
-        // updateBirdSpeed()
     }
 
     const restart = () => {

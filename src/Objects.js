@@ -283,7 +283,8 @@ class Bird extends AnimatedSprite {
       ground.tilePosition.x -= GAMESPEED;
   
       if (bird.position.y + bird.height / 2 > skyHeight) {
-          // hitPipe(setIsDead);
+        bird.stop();
+        setIsDead(true);
       }
       const points = pipeContainer.moveAll();
       if (points) {
@@ -298,7 +299,8 @@ class Bird extends AnimatedSprite {
           boxesIntersect(bird, pipe, padding) ||
           boxesIntersect(bird, pipe2, padding)
         ) {
-          // hitPipe(setIsDead);
+          bird.stop();
+          setIsDead(true);
         }
       }
     }
