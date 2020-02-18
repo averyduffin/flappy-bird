@@ -3,7 +3,8 @@ import { Circle } from 'react-shapes';
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import Pipe from './Pipe';
 import { useInterval } from './utils';
-import Background from './assets/background.svg';
+import backgroundUrl from './assets/background.svg';
+// import BackgroundUrl from './assets/background.svg';
 
 // import logo from './logo.svg';
 // import './App.css';
@@ -27,7 +28,7 @@ const initialPipes = (width, height) => {
     return pipes;
 }
 
-const App = ({ background }) => {
+const App = () => {
     const WINDOW_HEIGHT = window.innerHeight;
     const WINDOW_WIDTH = window.innerWidth;
     const [birdHeight, setBirdHeight] = useState(WINDOW_HEIGHT / 2);
@@ -87,12 +88,12 @@ const App = ({ background }) => {
         <div 
           className="App" 
           style={{
-            background: Background,
+            background: `url(${backgroundUrl})`,
             height: window.innerHeight,
             width: window.innerWidth,
           }}
         >
-          <Background></Background>
+          {/* <Background></Background> */}
           <KeyHandler keyEventName={KEYPRESS} keyValue="s" onKeyHandle={() => setVelocity(newVelocity => newVelocity - 25)} />
           <div style={{ left: BIRD_LEFT, top: birdHeight, position: 'absolute' }}>
             <Circle r={BIRD_RADIUS} fill={{ color: '#2409ba' }} stroke={{ color: '#E65243' }} strokeWidth={3} />
