@@ -29,7 +29,7 @@ export const ProvideObjects = ({ children }) => {
     useEffect(() => {
         const textures = asyncSetupSprites(source, sprites)
         const background = new Background(textures.background, width, height);
-        const pipeContainer = new PipeContainer(textures.pipe, width);
+        const pipeContainer = new PipeContainer(textures.pipe, app);
         const ground = new Ground(textures.ground, width, height - GROUND_HEIGHT);
 
         const bird = new Bird([
@@ -107,12 +107,12 @@ class PipeContainer extends Container {
     pipes = [];
     pipeIndex = 0;
   
-    constructor(pipeTexture, width, height) {
+    constructor(pipeTexture, app) {
       super();
       this.pipeTexture = pipeTexture;
-      this.width = width;
-      this.height = height
-      this.position.x = width + PIPEWIDTH / 2;
+      this.width = app.renderer.width;
+      this.app = app;
+      this.position.x = app.renderer.width + PIPEWIDTH / 2;
     }
   
     tryAddingNewPipe = () => {
@@ -152,6 +152,35 @@ class PipeContainer extends Container {
       pipe.position.x -= GAMESPEED;
       pipe2.position.x -= GAMESPEED;
     };
+
+    // const pipeGroup = {};
+    //   const pipe = new Pipe(this.pipeTexture);
+    //   const pipe2 = new Pipe(this.pipeTexture);
+    //   pipe.rotation = Math.PI;
+  
+    //   const maxPosition =
+    //     Settings.skyHeight -
+    //     Settings.minPipeHeight -
+    //     Settings.pipeVerticalGap -
+    //     pipe.height / 2;
+    //   const minPosition = -(pipe.height / 2 - Settings.minPipeHeight);
+  
+    //   pipe.position.y = Math.floor(
+    //     Math.random() * (maxPosition - minPosition + 1) + minPosition,
+    //   );
+  
+    //   pipe2.position.y = pipe.height + pipe.position.y + Settings.pipeVerticalGap;
+    //   pipe.position.x = pipe2.position.x = 0;
+  
+    //   pipeGroup.upper = pipe.position.y + pipe.height / 2;
+    //   pipeGroup.lower = pipeGroup.upper + Settings.pipeVerticalGap;
+    //   pipeGroup.pipe = pipe;
+    //   pipeGroup.pipe2 = pipe2;
+  
+    //   this.addChild(pipe);
+    //   this.addChild(pipe2);
+    //   this.pipes.push(pipeGroup);
+    //   this.tryRemovingLastGroup();
   
     addNewPipe = () => {
       const pipeGroup = {};
@@ -159,7 +188,14 @@ class PipeContainer extends Container {
       const pipe2 = new Pipe(this.pipeTexture);
       pipe.rotation = Math.PI;
         
-      const skyHeight = this.height - GROUND_HEIGHT; // might have problems
+      // const maxPosition =
+      //     Settings.skyHeight -
+      //     Settings.minPipeHeight -
+      //     Settings.pipeVerticalGap -
+      //     pipe.height / 2;
+      //   const minPosition = -(pipe.height / 2 - Settings.minPipeHeight);
+
+      const skyHeight = this.app.renderer.height - GROUND_HEIGHT; // might have problems
       const maxPosition =
         skyHeight -
         MINPIPEHEIGHT -
@@ -180,7 +216,7 @@ class PipeContainer extends Container {
       pipeGroup.pipe2 = pipe2;
   
       this.addChild(pipe);
-      this.addChild(pipe2);
+      // this.addChild(pipe2);
       this.pipes.push(pipeGroup);
       this.tryRemovingLastGroup();
     };
@@ -188,7 +224,7 @@ class PipeContainer extends Container {
     tryRemovingLastGroup = () => {
       if (
         this.pipes[0].pipe.position.x + PIPEWIDTH / 2 >
-        this.width //MIGHT CAUSE PROBLEMS
+        this.app.renderer.width //MIGHT CAUSE PROBLEMS
       ) {
         this.pipes.shift();
       }
