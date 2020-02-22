@@ -50,8 +50,17 @@ const Game = () => {
         bird,
     } = useObjects()
 
+    if(pipeContainer) {
+        window.blah = pipeContainer;
+        // pipeContainer.addNewPipe(-200);
+        // pipeContainer.addNewPipe(-800);
+        // pipeContainer.addNewPipe(-500);
+    }
+
     const [count, setCount] = useState(1)
-    usePixiTicker(() => animate(bird, ground, pipeContainer, stopAnimating, isDead, isStarted, saveHighScore, setStopAnimating, setIsDead, setScore, app.renderer.height), [bird, ground, pipeContainer])
+    usePixiTicker(() => {
+        animate(bird, ground, pipeContainer, stopAnimating, isDead, isStarted, saveHighScore, setStopAnimating, setIsDead, setScore, app.renderer.height)
+    }, [bird, ground, pipeContainer])
 
     return (
         <div>
