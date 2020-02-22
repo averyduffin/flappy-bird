@@ -12,7 +12,6 @@ const App = () => {
     const gameCanvas = useRef();
 
     useEffect(() => {
-        console.log(app)
         if(app) gameCanvas.current.appendChild(app.view); 
     }, [app])
 
