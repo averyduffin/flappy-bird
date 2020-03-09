@@ -7,7 +7,7 @@ import sprites from './assets/sprites';
 const objectContext = createContext();
 const SCALE = 1;
 const GROUND_HEIGHT = 100 * SCALE;
-const PLAYERFALLSPEED = 8 * SCALE;
+const PLAYERFALLSPEED = 3 * SCALE;
 const PLAYERHORIZONTALPOSITION = 100 * SCALE;
 const PLAYERVERTICALPOSITION = 200 * SCALE;
 const PLAYERMAXVELOCITY = -3 * SCALE;
@@ -15,9 +15,9 @@ const PIPEWIDTH = 80 * SCALE;
 const PIPEHEIGHT = 1200 * SCALE;
 const PLAYERGRAVITY = 0.4 * SCALE;
 const MINPIPEHEIGHT = 50 * SCALE;
-const PIPEVERTICALGAP = 190 * SCALE;
-const GAMESPEED = 35 * 0.25;
-const PIPEHORIZONTALGAP = PIPEWIDTH * 7;
+const PIPEVERTICALGAP = 225 * SCALE;
+const GAMESPEED = 20 * 0.25;
+const PIPEHORIZONTALGAP = PIPEWIDTH * 8;
 
 export const ProvideObjects = ({ children }) => {
     const app = usePixiApp()

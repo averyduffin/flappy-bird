@@ -4,6 +4,8 @@ import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import Pipe from './Pipe';
 import { useInterval } from './utils';
 import backgroundUrl from './assets/background.svg';
+import { getMicrophone } from './Audio/Audio';
+import AudioAnalyser from './Audio/AudioAnalyser';
 // import BackgroundUrl from './assets/background.svg';
 
 // import logo from './logo.svg';
@@ -31,6 +33,7 @@ const initialPipes = (width, height) => {
 const App = () => {
     const WINDOW_HEIGHT = window.innerHeight;
     const WINDOW_WIDTH = window.innerWidth;
+    const [audio, setAudio] = useState();
     const [birdHeight, setBirdHeight] = useState(WINDOW_HEIGHT / 2);
     const [velocity, setVelocity] = useState(0);
     const [pipes, setPipes] = useState(initialPipes(WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -84,6 +87,20 @@ const App = () => {
       setPipes(newPipes);
     }, 15)
 
+    const stopMicrophone = () => {
+      audio.getTracks().forEach(track => track.stop());
+      setAudio(null)
+    }
+
+    const toggleMicrophone = async () => {
+      if(audio) {
+        await stopMicrophone();
+      } else {
+        const newAudio = await getMicrophone()
+        setAudio(newAudio)
+      }
+    }
+
     return (
         <div 
           className="App" 
@@ -94,7 +111,7 @@ const App = () => {
           }}
         >
           {/* <Background></Background> */}
-          <KeyHandler keyEventName={KEYPRESS} keyValue="s" onKeyHandle={() => setVelocity(newVelocity => newVelocity - 25)} />
+          {/* <KeyHandler keyEventName={KEYPRESS} keyValue="s" onKeyHandle={() => setVelocity(newVelocity => newVelocity - 25)} /> */}
           <div style={{ left: BIRD_LEFT, top: birdHeight, position: 'absolute' }}>
             <Circle r={BIRD_RADIUS} fill={{ color: '#2409ba' }} stroke={{ color: '#E65243' }} strokeWidth={3} />
           </div>

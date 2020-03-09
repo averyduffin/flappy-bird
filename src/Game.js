@@ -3,6 +3,8 @@ import KeyboardEventHandler from 'react-keyboard-event-handler';
 import { Sprite, Stage } from "react-pixi-fiber";
 import { usePixiApp, usePixiTicker } from './pixiUtils';
 import { animate, useObjects } from './Objects';
+import { getMicrophone } from './Audio/Audio';
+import AudioAnalyser from './Audio/AudioAnalyser';
 
 const Game = () => {
     const app = usePixiApp();
@@ -12,11 +14,16 @@ const Game = () => {
     const [isDead, setIsDead] = useState(false);
     const [stopAnimating, setStopAnimating] = useState(false);
     const [score, setScore] = useState(0);
+    const [audio, setAudio] = useState();
+    const [count, setCount] = useState(1)
+
+
 
     const saveHighScore = (value) => console.log(value)
-    const onScore = useCallback(() => setScore((points) => (points + 1)))
+    const onScore = useCallback(() => setScore(score + 1))
 
     const startGame = () => {
+        if (isDead) return;
         if (!isStarted) {
             setIsStarted(true);
             setScore(0);
@@ -35,10 +42,14 @@ const Game = () => {
         // animate(stopAnimating, isDead, isStarted, saveHighScore, setStopAnimating, setIsDead, onScore)
     };
 
-    const onPress = () => {
+    const onPress = async () => {
         if (isDead) {
-            restart();
+            await restart();
         } else {
+            if(!audio) {
+                const newAudio = await getMicrophone()
+                setAudio(newAudio)
+            }
             startGame();
         }
     }
@@ -56,11 +67,23 @@ const Game = () => {
         // pipeContainer.addNewPipe(-800);
         // pipeContainer.addNewPipe(-500);
     }
-
-    const [count, setCount] = useState(1)
     usePixiTicker(() => {
-        animate(bird, ground, pipeContainer, stopAnimating, isDead, isStarted, saveHighScore, setStopAnimating, setIsDead, setScore, app.renderer.height)
+        animate(bird, ground, pipeContainer, stopAnimating, isDead, isStarted, saveHighScore, setStopAnimating, setIsDead, onScore, app.renderer.height)
     }, [bird, ground, pipeContainer])
+
+    const stopMicrophone = () => {
+        audio.getTracks().forEach(track => track.stop());
+        setAudio(null)
+    }
+  
+    const toggleMicrophone = async () => {
+        if(audio) {
+            await stopMicrophone();
+        } else {
+            const newAudio = await getMicrophone()
+            setAudio(newAudio)
+        }
+    }
 
     return (
         <div>
@@ -68,6 +91,8 @@ const Game = () => {
                 handleKeys={['all']}
                 onKeyEvent={(key, e) => onPress()} 
             />
+            <div style={{ position: 'absolute', zIndex: 20, color: 'black', fontSize: 60 }}>Score: {score}</div>
+            {audio ? <AudioAnalyser audio={audio} flap={startGame}></AudioAnalyser> : null}
         </div>)
 }
 
